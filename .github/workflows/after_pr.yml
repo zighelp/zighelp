@@ -1,9 +1,9 @@
-name: push_on_master_without_pr
+name: after_pr
 on:
-  push:
-    branches:
-      - master
-if: github.event_name == 'push' && github.event.pull_request == null
+  pull_request:
+    types:
+      - closed
+if: github.event.pull_request.merged == true
 permissions:
   contents: write
 jobs:
