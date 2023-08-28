@@ -1,13 +1,17 @@
 name: push_on_master_without_pr
 on:
   push:
-    if: github.event.pull_request == null
     branches:
       - master
 permissions:
   contents: write
 jobs:
   test:
+    # prevent running this job if it is from direct push, not from pull request
+    # this will still show the workflow and skipped job in the ui.
+    # there is no way currently to not trigger workflow on direct push
+    # oter than Server-side Git Hook
+    if: github.event.before == github.event.after
     strategy:
       matrix:
         # disabling windows-latest for now. zig fmt --check gives strange results
