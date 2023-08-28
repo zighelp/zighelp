@@ -3,11 +3,11 @@ on:
   push:
     branches:
       - master
-if: github.event_name == 'push' && github.event.pull_request == null
 permissions:
   contents: write
 jobs:
   test:
+    if: github.event_name == 'push' && github.event.pull_request == null
     strategy:
       matrix:
         # disabling windows-latest for now. zig fmt --check gives strange results
