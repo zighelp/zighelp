@@ -1,11 +1,11 @@
-name: ci
+name: push_on_master_without_pr
 on:
   push:
     branches:
       - master
-      - main
 permissions:
   contents: write
+if: github.event_name == 'push' && github.event.pull_request == null
 jobs:
   test:
     strategy:
