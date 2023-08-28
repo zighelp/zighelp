@@ -55,7 +55,7 @@ Knowing a language like C, C++, Rust, Go, Pascal or similar will be helpful for 
 3. Verify your install with `zig version`. The output should look something like
 ```
 $ zig version
-0.11.0-dev.2777+b95cdf0ae
+0.12.0-dev.170+750998eef
 ```
 
 4. (optional, third party) For completions and go-to-definition in your editor, install the Zig Language Server from https://github.com/zigtools/zls/.
