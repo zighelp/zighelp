@@ -2,7 +2,7 @@
 title: "Chapter 0 - Getting Started"
 weight: 1
 date: 2023-04-28 18:00:00
-description: "Zighelp - A Guide / Tutorial for the Zig programming language. Install and get started with ziglang here."
+description: "Zighelp - A Guide / Tutorial for the Zig programming language. Install and get started with ziglang here"
 ---
 
 ## Welcome
