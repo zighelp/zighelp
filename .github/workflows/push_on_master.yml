@@ -1,4 +1,4 @@
-name: push_on_master_without_pr
+name: push_on_master
 on:
   push:
     branches:
