@@ -580,7 +580,7 @@ Enums types may have specified (integer) tag types.
 const Value = enum(u2) { zero, one, two };
 ```
 
-Enum's ordinal values start at 0. They can be accessed with the built-in function [`@enumToInt`](https://ziglang.org/documentation/master/#enumToInt).
+Enum's ordinal values start at 0. They can be accessed with the built-in function [`@intFromEnum`](https://ziglang.org/documentation/master/#intFromEnum).
 ```zig
 test "enum ordinal value" {
     try expect(@intFromEnum(Value.zero) == 0);
