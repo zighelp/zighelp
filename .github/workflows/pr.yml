@@ -37,4 +37,5 @@ jobs:
       - run: |
           python --version
           pip install -r requirements.txt
+          python -c 'import tomllib'
           mkdocs build --strict
