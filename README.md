@@ -18,11 +18,19 @@ Zighelp is a fork of [ziglearn](https://ziglearn.org/) which offers several impr
 - Some small changes to README.md about installing locally and creating PRs with `gh`.
 
 For the future I plan to:
+
 - Actively merge community PRs
 - Add languages other than English
 - Extend content with more examples, topics
 - Keep the content updated with Zig's latest changes
 - Make an epub/pdf available for download
+
+## TODO
+
+- [ ] HashMap example with dupe
+- [ ] Merge PRs from ziglearn repo
+- [ ] Make tests run on Windows
+- [x] i18n aka internationalization aka translations
 
 **Why forking ziglearn?**
 
@@ -34,8 +42,10 @@ Also there is a lot of good content in the ziglearn repo that hasn't been merged
 
 ## Generate docs locally
 
+Use pyenv to select python version from `.python-version` file.
+
 ```sh
-$ python -m venv env
+$ python -m venv .env
 $ source env/bin/activate
 $ pip install -r requirements.txt
 $ mkdocs serve
@@ -54,14 +64,7 @@ $ pip freeze > requirements.txt
 1. `zig run test-out.zig`
 2. `zig test do_tests.zig`
 
-## TODO
-
-- [ ] HashMap example with dupe
-- [ ] Merge PRs from ziglearn repo
-- [ ] Make tests run on Windows
-- [x] i18n aka internationalization aka translations
-
-## Contributing
+## Creating a Pull Request (PR)
 
 When creating a PR, change the default base repository to `zighelp/zighelp`.
 
