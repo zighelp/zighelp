@@ -1,0 +1,1510 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Chapter 2 - This section of the tutorial will cover the Zig programming language's standard library in detail.">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter-1/">
+      
+      
+        <link rel="next" href="../chapter-3/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.3">
+    
+    
+      
+        <title>Chapter 2 - Standard Patterns - zighelp.org</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0e669242.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.85d0ee34.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="zighelp" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#allocators" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="zighelp.org" class="md-header__button md-logo" aria-label="zighelp.org" data-md-component="logo">
+      
+  <img src="../../assets/images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            zighelp.org
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Chapter 2 - Standard Patterns
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="zighelp" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_3" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="zighelp" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_3">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Selecione o idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../.." hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/ru/" hreflang="ru" class="md-select__link">
+              Русский (Russian)
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/pt/" hreflang="pt" class="md-select__link">
+              Português (Portuguese)
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/zighelp/zighelp/" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zighelp/zighelp
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="zighelp.org" class="md-nav__button md-logo" aria-label="zighelp.org" data-md-component="logo">
+      
+  <img src="../../assets/images/logo.svg" alt="logo">
+
+    </a>
+    zighelp.org
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/zighelp/zighelp/" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    zighelp/zighelp
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Capítulo 0 - Començando
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Capítulo 1 - O básico
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Capítulo 2 - Padrões Comuns
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Capítulo 2 - Padrões Comuns
+  </span>
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label=" ">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+       
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#allocators" class="md-nav__link">
+    Allocators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arraylist" class="md-nav__link">
+    Arraylist
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filesystem" class="md-nav__link">
+    Filesystem
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#readers-and-writers" class="md-nav__link">
+    Readers and Writers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting" class="md-nav__link">
+    Formatting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    JSON
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#random-numbers" class="md-nav__link">
+    Random Numbers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crypto" class="md-nav__link">
+    Crypto
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threads" class="md-nav__link">
+    Threads
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hash-maps" class="md-nav__link">
+    Hash Maps
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stacks" class="md-nav__link">
+    Stacks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sorting" class="md-nav__link">
+    Sorting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iterators" class="md-nav__link">
+    Iterators
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formatting-specifiers" class="md-nav__link">
+    Formatting specifiers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-formatting" class="md-nav__link">
+    Advanced Formatting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#end-of-chapter-2" class="md-nav__link">
+    End of Chapter 2
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Capítulo 3 - O sistema de compilação
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Capítulo 4 - Trabalhando com C
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Capítulo 5 - Async
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/zighelp/zighelp/edit/master/docs/en/chapter-2.md" title="Editar esta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/zighelp/zighelp/raw/master/docs/en/chapter-2.md" title="Ver fonte desta página" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.15 8.15 0 0 1-1.23-2Z"/></svg>
+    </a>
+  
+
+
+  <h1>Capítulo 2 - Padrões Comuns</h1>
+
+<p>Automatically generated standard library documentation can be found <a href="https://ziglang.org/documentation/master/std/">here</a>. Installing <a href="https://github.com/zigtools/zls/">ZLS</a> may also help you explore the standard library, which provides completions for it.</p>
+<h2 id="allocators">Allocators<a class="headerlink" href="#allocators" title="Permanent link">§</a></h2>
+<p>The Zig standard library provides a pattern for allocating memory, which allows the programmer to choose exactly how memory allocations are done within the standard library - no allocations happen behind your back in the standard library.</p>
+<p>The most basic allocator is <a href="https://ziglang.org/documentation/master/std/#A;std:heap.page_allocator"><code>std.heap.page_allocator</code></a>. Whenever this allocator makes an allocation it will ask your OS for entire pages of memory; an allocation of a single byte will likely reserve multiple kibibytes. As asking the OS for memory requires a system call this is also extremely inefficient for speed.</p>
+<p>Here, we allocate 100 bytes as a <code>[]u8</code>. Notice how defer is used in conjunction with a free - this is a common pattern for memory management in Zig.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span><span class="w"> </span><span class="n">std</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">@import</span><span class="p">(</span><span class="s">&quot;std&quot;</span><span class="p">);</span>
+<span class="kr">const</span><span class="w"> </span><span class="n">expect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="n">expect</span><span class="p">;</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;allocation&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">page_allocator</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">alloc</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">memory</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">memory</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="nb">@TypeOf</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">[]</span><span class="kt">u8</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The <a href="https://ziglang.org/documentation/master/std/#A;std:heap.FixedBufferAllocator"><code>std.heap.FixedBufferAllocator</code></a> is an allocator that allocates memory into a fixed buffer, and does not make any heap allocations. This is useful when heap usage is not wanted, for example when writing a kernel. It may also be considered for performance reasons. It will give you the error <code>OutOfMemory</code> if it has run out of bytes.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;fixed buffer allocator&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">buffer</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1000</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">fba</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">FixedBufferAllocator</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fba</span><span class="p">.</span><span class="n">allocator</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">alloc</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">memory</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">memory</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="nb">@TypeOf</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">[]</span><span class="kt">u8</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:heap.ArenaAllocator"><code>std.heap.ArenaAllocator</code></a> takes in a child allocator, and allows you to allocate many times and only free once. Here, <code>.deinit()</code> is called on the arena which frees all memory. Using <code>allocator.free</code> in this example would be a no-op (i.e. does nothing).</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;arena allocator&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">arena</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">ArenaAllocator</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">page_allocator</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">arena</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arena</span><span class="p">.</span><span class="n">allocator</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">alloc</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">alloc</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">alloc</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>alloc</code> and <code>free</code> are used for slices. For single items, consider using <code>create</code> and <code>destroy</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;allocator create/destroy&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">page_allocator</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="kt">u8</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">page_allocator</span><span class="p">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">byte</span><span class="p">);</span>
+<span class="w">    </span><span class="n">byte</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">128</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The Zig standard library also has a general purpose allocator. This is a safe allocator which can prevent double-free, use-after-free and can detect leaks. Safety checks and thread safety can be turned off via its configuration struct (left empty below). Zig's GPA is designed for safety over performance, but may still be many times faster than page_allocator.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;GPA&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">gpa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">GeneralPurposeAllocator</span><span class="p">(.{}){};</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gpa</span><span class="p">.</span><span class="n">allocator</span><span class="p">();</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">const</span><span class="w"> </span><span class="n">deinit_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gpa</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">//fail test; can&#39;t try in defer as defer is executed after we return</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">deinit_status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">.</span><span class="n">leak</span><span class="p">)</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="nb">@panic</span><span class="p">(</span><span class="s">&quot;TEST FAIL&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">alloc</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">bytes</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>For high performance (but very few safety features!), <a href="https://ziglang.org/documentation/master/std/#A;std:heap.c_allocator"><code>std.heap.c_allocator</code></a> may be considered. This however has the disadvantage of requiring linking Libc, which can be done with <code>-lc</code>.</p>
+<p>Benjamin Feng's talk <a href="https://www.youtube.com/watch?v=vHWiDx_l4V0"><em>What's a Memory Allocator Anyway?</em></a> goes into more detail on this topic, and covers the implementation of allocators.</p>
+<h2 id="arraylist">Arraylist<a class="headerlink" href="#arraylist" title="Permanent link">§</a></h2>
+<p>The <a href="https://ziglang.org/documentation/master/std/#A;std:ArrayList"><code>std.ArrayList</code></a> is commonly used throughout Zig, and serves as a buffer which can change in size. <code>std.ArrayList(T)</code> is similar to C++'s <code>std::vector&lt;T&gt;</code> and Rust's <code>Vec&lt;T&gt;</code>. The <code>deinit()</code> method frees all of the ArrayList's memory. The memory can be read from and written to via its slice field - <code>.items</code>.</p>
+<p>Here we will introduce the usage of the testing allocator. This is a special allocator that only works in tests, and can detect memory leaks. In your code, use whatever allocator is appropriate.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="n">expectEqualSlices</span><span class="p">;</span>
+<span class="kr">const</span><span class="w"> </span><span class="n">ArrayList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">ArrayList</span><span class="p">;</span>
+<span class="kr">const</span><span class="w"> </span><span class="n">test_allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">testing</span><span class="p">.</span><span class="n">allocator</span><span class="p">;</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;arraylist&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ArrayList</span><span class="p">(</span><span class="kt">u8</span><span class="p">).</span><span class="n">init</span><span class="p">(</span><span class="n">test_allocator</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;H&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;e&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;l&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;l&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;o&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">appendSlice</span><span class="p">(</span><span class="s">&quot; World!&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="filesystem">Filesystem<a class="headerlink" href="#filesystem" title="Permanent link">§</a></h2>
+<p>Let's create and open a file in our current working directory, write to it, and then read from it. Here we have to use <code>.seekTo</code> in order to go back to the start of the file before reading what we have written.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;createFile, write, seekTo, read&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">createFile</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;junk_file.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">bytes_written</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">writeAll</span><span class="p">(</span><span class="s">&quot;Hello File!&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bytes_written</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">buffer</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">100</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">seekTo</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">bytes_read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">readAll</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="n">bytes_read</span><span class="p">],</span><span class="w"> </span><span class="s">&quot;Hello File!&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The functions <a href="https://ziglang.org/documentation/master/std/#A;std:fs.openFileAbsolute"><code>std.fs.openFileAbsolute</code></a> and similar absolute functions exist, but we will not test them here.</p>
+<p>We can get various information about files by using <code>.stat()</code> on them. <code>Stat</code> also contains fields for .inode and .mode, but they are not tested here as they rely on the current OS' types.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;file stat&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">createFile</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;junk_file2.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">stat</span><span class="p">();</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">.</span><span class="n">file</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="n">ctime</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">nanoTimestamp</span><span class="p">());</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="n">mtime</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">nanoTimestamp</span><span class="p">());</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">stat</span><span class="p">.</span><span class="n">atime</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">nanoTimestamp</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>We can make directories and iterate over their contents. Here we will use an iterator (discussed later). This directory (and its contents) will be deleted after this test finishes.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;make dir&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">makeDir</span><span class="p">(</span><span class="s">&quot;test-tmp&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">iter_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">openIterableDir</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;test-tmp&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">deleteTree</span><span class="p">(</span><span class="s">&quot;test-tmp&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="k">unreachable</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">iter_dir</span><span class="p">.</span><span class="n">dir</span><span class="p">.</span><span class="n">createFile</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{});</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">iter_dir</span><span class="p">.</span><span class="n">dir</span><span class="p">.</span><span class="n">createFile</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{});</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">iter_dir</span><span class="p">.</span><span class="n">dir</span><span class="p">.</span><span class="n">createFile</span><span class="p">(</span><span class="s">&quot;z&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{});</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">file_count</span><span class="o">:</span><span class="w"> </span><span class="kt">usize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iter_dir</span><span class="p">.</span><span class="n">iterate</span><span class="p">();</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">try</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">())</span><span class="w"> </span><span class="o">|</span><span class="n">entry</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">entry</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">.</span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="n">file_count</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">file_count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="readers-and-writers">Readers and Writers<a class="headerlink" href="#readers-and-writers" title="Permanent link">§</a></h2>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:io.Writer"><code>std.io.Writer</code></a> and <a href="https://ziglang.org/documentation/master/std/#A;std:io.Reader"><code>std.io.Reader</code></a> provide standard ways of making use of IO. <code>std.ArrayList(u8)</code> has a <code>writer</code> method which gives us a writer. Let's use it.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;io writer usage&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ArrayList</span><span class="p">(</span><span class="kt">u8</span><span class="p">).</span><span class="n">init</span><span class="p">(</span><span class="n">test_allocator</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">bytes_written</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">writer</span><span class="p">().</span><span class="n">write</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;Hello World!&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">bytes_written</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">12</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Here we will use a reader to copy the file's contents into an allocated buffer. The second argument of <a href="https://ziglang.org/documentation/master/std/#A;std:io.Reader.readAllAlloc"><code>readAllAlloc</code></a> is the maximum size that it may allocate; if the file is larger than this, it will return <code>error.StreamTooLong</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;io reader usage&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello File!&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">createFile</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;junk_file2.txt&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">writeAll</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">seekTo</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">reader</span><span class="p">().</span><span class="n">readAllAlloc</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">        </span><span class="n">message</span><span class="p">.</span><span class="n">len</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">test_allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">contents</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">contents</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A common usecase for readers is to read until the next line (e.g. for user input). Here we will do this with the <a href="https://ziglang.org/documentation/master/std/#A;std:io.getStdIn"><code>std.io.getStdIn()</code></a> file.</p>
+<!--no_test-->
+<div class="highlight"><pre><span></span><code><span class="k">fn</span><span class="w"> </span><span class="n">nextLine</span><span class="p">(</span><span class="n">reader</span><span class="o">:</span><span class="w"> </span><span class="n">anytype</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="o">!?</span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">try</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="n">readUntilDelimiterOrEof</span><span class="p">(</span>
+<span class="w">        </span><span class="n">buffer</span><span class="p">,</span>
+<span class="w">        </span><span class="se">&#39;\n&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">))</span><span class="w"> </span><span class="k">orelse</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// trim annoying windows-only carriage return character</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">@import</span><span class="p">(</span><span class="s">&quot;builtin&quot;</span><span class="p">).</span><span class="n">os</span><span class="p">.</span><span class="n">tag</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">.</span><span class="n">windows</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">trimRight</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\r</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">line</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;read until next line&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">stdout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">getStdOut</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">stdin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">getStdIn</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">stdout</span><span class="p">.</span><span class="n">writeAll</span><span class="p">(</span>
+<span class="w">        </span><span class="sh">\\ Enter your name:</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">buffer</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">100</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">try</span><span class="w"> </span><span class="n">nextLine</span><span class="p">(</span><span class="n">stdin</span><span class="p">.</span><span class="n">reader</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">)).</span><span class="o">?</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">stdout</span><span class="p">.</span><span class="n">writer</span><span class="p">().</span><span class="n">print</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;Your name is: </span><span class="se">\&quot;</span><span class="s">{s}</span><span class="se">\&quot;\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="n">input</span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>An <a href="https://ziglang.org/documentation/master/std/#A;std:io.Writer"><code>std.io.Writer</code></a> type consists of a context type, error set, and a write function. The write function must take in the context type and a byte slice. The write function must also return an error union of the Writer type's error set and the amount of bytes written. Let's create a type that implements a writer.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Don&#39;t create a type like this! Use an</span>
+<span class="c1">// arraylist with a fixed buffer allocator</span>
+<span class="kr">const</span><span class="w"> </span><span class="n">MyByteList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">data</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">100</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">,</span>
+<span class="w">    </span><span class="n">items</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="kt">u8</span><span class="p">{},</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">Writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">Writer</span><span class="p">(</span>
+<span class="w">        </span><span class="o">*</span><span class="n">MyByteList</span><span class="p">,</span>
+<span class="w">        </span><span class="k">error</span><span class="p">{</span><span class="n">EndOfBuffer</span><span class="p">},</span>
+<span class="w">        </span><span class="n">appendWrite</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="n">appendWrite</span><span class="p">(</span>
+<span class="w">        </span><span class="n">self</span><span class="o">:</span><span class="w"> </span><span class="o">*</span><span class="n">MyByteList</span><span class="p">,</span>
+<span class="w">        </span><span class="n">data</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="k">error</span><span class="p">{</span><span class="n">EndOfBuffer</span><span class="p">}</span><span class="o">!</span><span class="kt">usize</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">error</span><span class="p">.</span><span class="n">EndOfBuffer</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span>
+<span class="w">            </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">len</span><span class="p">..],</span>
+<span class="w">            </span><span class="n">data</span><span class="p">,</span>
+<span class="w">        </span><span class="p">);</span>
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">items</span><span class="p">.</span><span class="n">len</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">];</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="n">writer</span><span class="p">(</span><span class="n">self</span><span class="o">:</span><span class="w"> </span><span class="o">*</span><span class="n">MyByteList</span><span class="p">)</span><span class="w"> </span><span class="n">Writer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;custom writer&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MyByteList</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bytes</span><span class="p">.</span><span class="n">writer</span><span class="p">().</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bytes</span><span class="p">.</span><span class="n">writer</span><span class="p">().</span><span class="n">write</span><span class="p">(</span><span class="s">&quot; Writer!&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">bytes</span><span class="p">.</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello Writer!&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="formatting">Formatting<a class="headerlink" href="#formatting" title="Permanent link">§</a></h2>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:fmt"><code>std.fmt</code></a> provides ways to format data to and from strings.</p>
+<p>A basic example of creating a formatted string. The format string must be compile time known. The <code>d</code> here denotes that we want a decimal number.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;fmt&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">allocPrint</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;{d} + {d} = {d}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">test_allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;9 + 10 = 19&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Writers conveniently have a <code>print</code> method, which works similarly.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;print&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">ArrayList</span><span class="p">(</span><span class="kt">u8</span><span class="p">).</span><span class="n">init</span><span class="p">(</span><span class="n">test_allocator</span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">writer</span><span class="p">().</span><span class="n">print</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;{} + {} = {}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="p">.</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;9 + 10 = 19&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Take a moment to appreciate that you now know from top to bottom how printing hello world works. <a href="https://ziglang.org/documentation/master/std/#A;std:debug.print"><code>std.debug.print</code></a> works the same, except it writes to stderr and is protected by a mutex.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;hello world&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">out_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">getStdOut</span><span class="p">();</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">out_file</span><span class="p">.</span><span class="n">writer</span><span class="p">().</span><span class="n">print</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;Hello, {s}!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="s">&quot;World&quot;</span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>We have used the <code>{s}</code> format specifier up until this point to print strings. Here we will use <code>{any}</code>, which gives us the default formatting.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;array printing&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">allocPrint</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;{any} + {any} = {any}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span>
+<span class="w">            </span><span class="nb">@as</span><span class="p">([]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="kt">u8</span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">}),</span>
+<span class="w">            </span><span class="nb">@as</span><span class="p">([]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="kt">u8</span><span class="p">{</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">}),</span>
+<span class="w">            </span><span class="nb">@as</span><span class="p">([]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="kt">u8</span><span class="p">{</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="p">}),</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">test_allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="n">string</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;{ 1, 4 } + { 2, 5 } = { 3, 9 }&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Let's create a type with custom formatting by giving it a <code>format</code> function. This function must be marked as <code>pub</code> so that std.fmt can access it (more on packages later). You may notice the usage of <code>{s}</code> instead of <code>{}</code> - this is the format specifier for strings (more on format specifiers later). This is used here as <code>{}</code> defaults to array printing over string printing.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">name</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">    </span><span class="n">birth_year</span><span class="o">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span>
+<span class="w">    </span><span class="n">death_year</span><span class="o">:</span><span class="w"> </span><span class="o">?</span><span class="kt">i32</span><span class="p">,</span>
+<span class="w">    </span><span class="kr">pub</span><span class="w"> </span><span class="k">fn</span><span class="w"> </span><span class="n">format</span><span class="p">(</span>
+<span class="w">        </span><span class="n">self</span><span class="o">:</span><span class="w"> </span><span class="n">Person</span><span class="p">,</span>
+<span class="w">        </span><span class="kr">comptime</span><span class="w"> </span><span class="n">fmt</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="n">options</span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">FormatOptions</span><span class="p">,</span>
+<span class="w">        </span><span class="n">writer</span><span class="o">:</span><span class="w"> </span><span class="n">anytype</span><span class="p">,</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="o">!</span><span class="kt">void</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fmt</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">options</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">writer</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;{s} ({}-&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span>
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">birth_year</span><span class="p">,</span>
+<span class="w">        </span><span class="p">});</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">death_year</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="n">year</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="n">writer</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">year</span><span class="p">});</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">writer</span><span class="p">.</span><span class="n">writeAll</span><span class="p">(</span><span class="s">&quot;)&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;custom fmt&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">john</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Person</span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;John Carmack&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">birth_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1970</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">death_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">john_string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">allocPrint</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;{s}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="n">john</span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">test_allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">john_string</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="n">john_string</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;John Carmack (1970-)&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">claude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Person</span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Claude Shannon&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">birth_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1916</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">death_year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2001</span><span class="p">,</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">claude_string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">allocPrint</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;{s}&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{</span><span class="n">claude</span><span class="p">},</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">test_allocator</span><span class="p">.</span><span class="n">free</span><span class="p">(</span><span class="n">claude_string</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="n">claude_string</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;Claude Shannon (1916-2001)&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="json">JSON<a class="headerlink" href="#json" title="Permanent link">§</a></h2>
+<p>Let's parse a json string into a struct type, using the streaming parser.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span><span class="w"> </span><span class="n">Place</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">lat</span><span class="o">:</span><span class="w"> </span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">long</span><span class="o">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="p">};</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;json parse&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">json</span><span class="p">.</span><span class="n">parseFromSlice</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span><span class="w"> </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">        </span><span class="sh">\\{ &quot;lat&quot;: 40.684540, &quot;long&quot;: -74.401422 }</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="p">.{});</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">parsed</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parsed</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">lat</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">40.684540</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">long</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">-</span><span class="mf">74.401422</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And using stringify to turn arbitrary data into a string.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;json stringify&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Place</span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">lat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">51.997664</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.</span><span class="n">long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">0.740687</span><span class="p">,</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">buf</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">100</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">fba</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">heap</span><span class="p">.</span><span class="n">FixedBufferAllocator</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">ArrayList</span><span class="p">(</span><span class="kt">u8</span><span class="p">).</span><span class="n">init</span><span class="p">(</span><span class="n">fba</span><span class="p">.</span><span class="n">allocator</span><span class="p">());</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">json</span><span class="p">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="p">.{},</span><span class="w"> </span><span class="n">string</span><span class="p">.</span><span class="n">writer</span><span class="p">());</span>
+
+<span class="w">    </span><span class="c1">// TODO: Remove? @dec05eba: You cant compare floating point numbers exactly</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="p">.</span><span class="n">items</span><span class="p">,</span>
+<span class="w">        </span><span class="sh">\\{&quot;lat&quot;:5.199766540527344e+01,&quot;long&quot;:-7.406870126724243e-01}</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The json parser requires an allocator for javascript's string, array, and map types. This memory may be freed using <a href="https://ziglang.org/documentation/master/std/#A;std:json.parseFree"><code>std.json.parseFree</code></a>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;json parse with strings&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">name</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="o">:</span><span class="w"> </span><span class="kt">u16</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="c1">// TODO: Use leaky?</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">json</span><span class="p">.</span><span class="n">parseFromSlice</span><span class="p">(</span><span class="n">User</span><span class="p">,</span><span class="w"> </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">        </span><span class="sh">\\{ &quot;name&quot;: &quot;Joe&quot;, &quot;age&quot;: 25 }</span>
+<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="p">.{});</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">parsed</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parsed</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Joe&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">age</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">25</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="random-numbers">Random Numbers<a class="headerlink" href="#random-numbers" title="Permanent link">§</a></h2>
+<p>Here we create a new prng using a 64 bit random seed. a, b, c, and d are given random values via this prng. The expressions giving c and d values are equivalent. <code>DefaultPrng</code> is <code>Xoshiro256</code>; there are other prngs available in std.rand.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;random numbers&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">prng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">rand</span><span class="p">.</span><span class="n">DefaultPrng</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">blk</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">var</span><span class="w"> </span><span class="n">seed</span><span class="o">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">os</span><span class="p">.</span><span class="n">getrandom</span><span class="p">(</span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">asBytes</span><span class="p">(</span><span class="o">&amp;</span><span class="n">seed</span><span class="p">));</span>
+<span class="w">        </span><span class="k">break</span><span class="w"> </span><span class="o">:</span><span class="n">blk</span><span class="w"> </span><span class="n">seed</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">rand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prng</span><span class="p">.</span><span class="n">random</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">float</span><span class="p">(</span><span class="kt">f32</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">boolean</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">int</span><span class="p">(</span><span class="kt">u8</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">intRangeAtMost</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">//suppress unused constant compile error</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Cryptographically secure random is also available.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;crypto random numbers&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">rand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">crypto</span><span class="p">.</span><span class="n">random</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">float</span><span class="p">(</span><span class="kt">f32</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">boolean</span><span class="p">();</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">int</span><span class="p">(</span><span class="kt">u8</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">.</span><span class="n">intRangeAtMost</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">//suppress unused constant compile error</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="crypto">Crypto<a class="headerlink" href="#crypto" title="Permanent link">§</a></h2>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:crypto"><code>std.crypto</code></a> includes many cryptographic utilities, including:
+-  AES (Aes128, Aes256)
+-  Diffie-Hellman key exchange (x25519)
+-  Elliptic-curve arithmetic (curve25519, edwards25519, ristretto255)
+-  Crypto secure hashing (blake2, Blake3, Gimli, Md5, sha1, sha2, sha3)
+-  MAC functions (Ghash, Poly1305)
+-  Stream ciphers (ChaCha20IETF, ChaCha20With64BitNonce, XChaCha20IETF, Salsa20, XSalsa20)</p>
+<p>This list is inexhaustive. For more in-depth information, try <a href="https://www.youtube.com/watch?v=9t6Y7KoCvyk">A tour of std.crypto in Zig 0.7.0 - Frank Denis</a>.</p>
+<h2 id="threads">Threads<a class="headerlink" href="#threads" title="Permanent link">§</a></h2>
+<p>While Zig provides more advanced ways of writing concurrent and parallel code, <a href="https://ziglang.org/documentation/master/std/#A;std:Thread"><code>std.Thread</code></a> is available for making use of OS threads. Let's make use of an OS thread.</p>
+<div class="highlight"><pre><span></span><code><span class="k">fn</span><span class="w"> </span><span class="n">ticker</span><span class="p">(</span><span class="n">step</span><span class="o">:</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">ns_per_s</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tick</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nb">@as</span><span class="p">(</span><span class="kt">isize</span><span class="p">,</span><span class="w"> </span><span class="n">step</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">var</span><span class="w"> </span><span class="n">tick</span><span class="o">:</span><span class="w"> </span><span class="kt">isize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;threading&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">thread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">spawn</span><span class="p">(.{},</span><span class="w"> </span><span class="n">ticker</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="nb">@as</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)});</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thread</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">tick</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">ns_per_s</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">tick</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Threads, however, aren't particularly useful without strategies for thread safety.</p>
+<h2 id="hash-maps">Hash Maps<a class="headerlink" href="#hash-maps" title="Permanent link">§</a></h2>
+<p>The standard library provides <a href="https://ziglang.org/documentation/master/std/#A;std:AutoHashMap"><code>std.AutoHashMap</code></a>, which lets you easily create a hash map type from a key type and a value type. These must be initiated with an allocator.</p>
+<p>Let's put some values in a hash map.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;hashing&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">x</span><span class="o">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">:</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">AutoHashMap</span><span class="p">(</span><span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">Point</span><span class="p">).</span><span class="n">init</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1525</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">4</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1550</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1575</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1600</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">});</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Point</span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">iterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">iterator</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">next</span><span class="p">())</span><span class="w"> </span><span class="o">|</span><span class="n">entry</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">entry</span><span class="p">.</span><span class="n">value_ptr</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+<span class="w">        </span><span class="n">sum</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">entry</span><span class="p">.</span><span class="n">value_ptr</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">sum</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">sum</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>.fetchPut</code> puts a value in the hash map, returning a value if there was previously a value for that key.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;fetchPut&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">AutoHashMap</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="kt">f32</span><span class="p">).</span><span class="n">init</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">fetchPut</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">old</span><span class="p">.</span><span class="o">?</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="mi">255</span><span class="p">).</span><span class="o">?</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:StringHashMap"><code>std.StringHashMap</code></a> is also provided for when you need strings as keys.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;string hashmap&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">map</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">StringHashMap</span><span class="p">(</span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cool</span><span class="p">,</span><span class="w"> </span><span class="n">uncool</span><span class="w"> </span><span class="p">}).</span><span class="n">init</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;loris&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">uncool</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">&quot;me&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">cool</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;me&quot;</span><span class="p">).</span><span class="o">?</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">.</span><span class="n">cool</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;loris&quot;</span><span class="p">).</span><span class="o">?</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">.</span><span class="n">uncool</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:StringHashMap"><code>std.StringHashMap</code></a> and <a href="https://ziglang.org/documentation/master/std/#A;std:AutoHashMap"><code>std.AutoHashMap</code></a> are just wrappers for <a href="https://ziglang.org/documentation/master/std/#A;std:HashMap"><code>std.HashMap</code></a>. If these two do not fulfil your needs, using <a href="https://ziglang.org/documentation/master/std/#A;std:HashMap"><code>std.HashMap</code></a> directly gives you much more control.</p>
+<p>If having your elements backed by an array is wanted behaviour, try <a href="https://ziglang.org/documentation/master/std/#A;std:ArrayHashMap"><code>std.ArrayHashMap</code></a> and its wrapper <a href="https://ziglang.org/documentation/master/std/#A;std:AutoArrayHashMap"><code>std.AutoArrayHashMap</code></a>.</p>
+<h2 id="stacks">Stacks<a class="headerlink" href="#stacks" title="Permanent link">§</a></h2>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:ArrayList"><code>std.ArrayList</code></a> provides the methods necessary to use it as a stack. Here's an example of creating a list of matched brackets.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;stack&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;(()())&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">ArrayList</span><span class="p">(</span><span class="kt">usize</span><span class="p">).</span><span class="n">init</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">Pair</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">open</span><span class="o">:</span><span class="w"> </span><span class="kt">usize</span><span class="p">,</span><span class="w"> </span><span class="n">close</span><span class="o">:</span><span class="w"> </span><span class="kt">usize</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">pairs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">ArrayList</span><span class="p">(</span><span class="n">Pair</span><span class="p">).</span><span class="n">init</span><span class="p">(</span>
+<span class="w">        </span><span class="n">test_allocator</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="n">pairs</span><span class="p">.</span><span class="n">deinit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">..)</span><span class="w"> </span><span class="o">|</span><span class="n">char</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">char</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;(&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">char</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;)&#39;</span><span class="p">)</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="n">pairs</span><span class="p">.</span><span class="n">append</span><span class="p">(.{</span>
+<span class="w">                </span><span class="p">.</span><span class="n">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">(),</span>
+<span class="w">                </span><span class="p">.</span><span class="n">close</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">,</span>
+<span class="w">            </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">pairs</span><span class="p">.</span><span class="n">items</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">..)</span><span class="w"> </span><span class="o">|</span><span class="n">pair</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">std</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">eql</span><span class="p">(</span><span class="n">pair</span><span class="p">,</span><span class="w"> </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="mi">0</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Pair</span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">close</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="mi">1</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Pair</span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">close</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="mi">2</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Pair</span><span class="p">{</span><span class="w"> </span><span class="p">.</span><span class="n">open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">close</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">unreachable</span><span class="p">,</span>
+<span class="w">        </span><span class="p">}));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="sorting">Sorting<a class="headerlink" href="#sorting" title="Permanent link">§</a></h2>
+<p>The standard library provides utilities for in-place sorting slices. Its basic usage is as follows.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;sorting&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="kt">u8</span><span class="p">{</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">240</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="kr">comptime</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">sort</span><span class="p">.</span><span class="n">asc</span><span class="p">(</span><span class="kt">u8</span><span class="p">));</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="kt">u8</span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">240</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="kr">comptime</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">sort</span><span class="p">.</span><span class="n">desc</span><span class="p">(</span><span class="kt">u8</span><span class="p">));</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">_</span><span class="p">]</span><span class="kt">u8</span><span class="p">{</span><span class="w"> </span><span class="mi">240</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:sort.asc"><code>std.sort.asc</code></a> and <a href="https://ziglang.org/documentation/master/std/#A;std:sort.desc"><code>.desc</code></a> create a comparison function for the given type at comptime; if non-numerical types should be sorted, the user must provide their own comparison function.</p>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:mem.sort"><code>std.mem.sort</code></a> has a best case of O(n), and an average and worst case of O(n*log(n)).</p>
+<h2 id="iterators">Iterators<a class="headerlink" href="#iterators" title="Permanent link">§</a></h2>
+<p>It is a common idiom to have a struct type with a <code>next</code> function with an optional in its return type, so that the function may return a null to indicate that iteration is finished.</p>
+<p><a href="https://ziglang.org/documentation/master/std/#A;std:mem.SplitIterator"><code>std.mem.SplitIterator</code></a> (and the subtly different <a href="https://ziglang.org/documentation/master/std/#A;std:mem.TokenIterator"><code>std.mem.TokenIterator</code></a>) is an example of this pattern.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;split iterator&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;robust, optimal, reusable, maintainable, &quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;, &quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;robust&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;optimal&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;reusable&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;maintainable&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>Some iterators have a <code>!?T</code> return type, as opposed to ?T. <code>!?T</code> requires that we unpack the error union before the optional, meaning that the work done to get to the next iteration may error. Here is an example of doing this with a loop. <a href="https://ziglang.org/documentation/master/std/#std;fs.cwd"><code>cwd</code></a> has to be opened with iterate permissions in order for the directory iterator to work.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;iterator looping&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">try</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fs</span><span class="p">.</span><span class="n">cwd</span><span class="p">().</span><span class="n">openIterableDir</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;.&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">.{},</span>
+<span class="w">    </span><span class="p">)).</span><span class="n">iterate</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">file_count</span><span class="o">:</span><span class="w"> </span><span class="kt">usize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">try</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">())</span><span class="w"> </span><span class="o">|</span><span class="n">entry</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">entry</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">.</span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="n">file_count</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">file_count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Here we will implement a custom iterator. This will iterate over a slice of strings, yielding the strings which contain a given string.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span><span class="w"> </span><span class="n">ContainsIterator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">strings</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">    </span><span class="n">needle</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">    </span><span class="n">index</span><span class="o">:</span><span class="w"> </span><span class="kt">usize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="n">next</span><span class="p">(</span><span class="n">self</span><span class="o">:</span><span class="w"> </span><span class="o">*</span><span class="n">ContainsIterator</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="p">[]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">const</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">index</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">strings</span><span class="p">[</span><span class="n">index</span><span class="p">..])</span><span class="w"> </span><span class="o">|</span><span class="n">string</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">index</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="p">.</span><span class="n">mem</span><span class="p">.</span><span class="n">indexOf</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">needle</span><span class="p">))</span><span class="w"> </span><span class="o">|</span><span class="n">_</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">string</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;custom iterator&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ContainsIterator</span><span class="p">{</span>
+<span class="w">        </span><span class="p">.</span><span class="n">strings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="p">[</span><span class="n">_</span><span class="p">][]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">{</span><span class="w"> </span><span class="s">&quot;one&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;two&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;three&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">.</span><span class="n">needle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;e&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;one&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">().</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;three&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expect</span><span class="p">(</span><span class="n">iter</span><span class="p">.</span><span class="n">next</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="formatting-specifiers">Formatting specifiers<a class="headerlink" href="#formatting-specifiers" title="Permanent link">§</a></h2>
+<p><a href="https://ziglang.org/documentation/master/std/#std;fmt"><code>std.fmt</code></a> provides options for formatting various data types.</p>
+<p><code>std.fmt.fmtSliceHexLower</code> and <code>std.fmt.fmtSliceHexUpper</code> provide hex formatting for strings as well as <code>{x}</code> and <code>{X}</code> for ints.
+<div class="highlight"><pre><span></span><code><span class="kr">const</span><span class="w"> </span><span class="n">bufPrint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">bufPrint</span><span class="p">;</span>
+
+<span class="k">test</span><span class="w"> </span><span class="s">&quot;hex&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{X}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mi">4294967294</span><span class="p">});</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;FFFFFFFE&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{x}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mi">4294967294</span><span class="p">});</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fffffffe&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">fmtSliceHexLower</span><span class="p">(</span><span class="s">&quot;Zig!&quot;</span><span class="p">)});</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;5a696721&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p><code>{d}</code> performs decimal formatting for numeric types.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;decimal float&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{d}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mf">16.5</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;16.5&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>{c}</code> formats a byte into an ascii character.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;ascii fmt&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{c}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mi">66</span><span class="p">});</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;B&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p><code>std.fmt.fmtIntSizeDec</code> and <code>std.fmt.fmtIntSizeBin</code> output memory sizes in metric (1000) and power-of-two (1024) based notation.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;B Bi&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">fmtIntSizeDec</span><span class="p">(</span><span class="mi">1</span><span class="p">)}),</span><span class="w"> </span><span class="s">&quot;1B&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">fmtIntSizeBin</span><span class="p">(</span><span class="mi">1</span><span class="p">)}),</span><span class="w"> </span><span class="s">&quot;1B&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">fmtIntSizeDec</span><span class="p">(</span><span class="mi">1024</span><span class="p">)}),</span><span class="w"> </span><span class="s">&quot;1.024kB&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">fmtIntSizeBin</span><span class="p">(</span><span class="mi">1024</span><span class="p">)}),</span><span class="w"> </span><span class="s">&quot;1KiB&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">fmtIntSizeDec</span><span class="p">(</span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">)}),</span>
+<span class="w">        </span><span class="s">&quot;1.073741824GB&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">std</span><span class="p">.</span><span class="n">fmt</span><span class="p">.</span><span class="n">fmtIntSizeBin</span><span class="p">(</span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">)}),</span>
+<span class="w">        </span><span class="s">&quot;1GiB&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>{b}</code> and <code>{o}</code> output integers in binary and octal format.</p>
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;binary, octal fmt&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{b}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mi">254</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;11111110&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{o}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mi">254</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;376&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>{*}</code> performs pointer formatting, printing the address rather than the value.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;pointer fmt&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">16</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{*}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="nb">@as</span><span class="p">(</span><span class="o">*</span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="nb">@ptrFromInt</span><span class="p">(</span><span class="mh">0xDEADBEEF</span><span class="p">))}),</span>
+<span class="w">        </span><span class="s">&quot;u8@deadbeef&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p><code>{e}</code> outputs floats in scientific notation.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;scientific&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">16</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{e}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mf">3.14159</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;3.14159e+00&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p><code>{s}</code> outputs strings.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;string fmt&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">const</span><span class="w"> </span><span class="n">hello</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="o">*:</span><span class="mi">0</span><span class="p">]</span><span class="kr">const</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;hello!&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{s}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="n">hello</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;hello!&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>This list is non-exhaustive.</p>
+<h2 id="advanced-formatting">Advanced Formatting<a class="headerlink" href="#advanced-formatting" title="Permanent link">§</a></h2>
+<p>So far we have only covered formatting specifiers. Format strings actually follow this format, where between each pair of square brackets is a parameter you have to replace with something.</p>
+<p><code>{[position][specifier]:[fill][alignment][width].[precision]}</code></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Position</td>
+<td>The index of the argument that should be inserted</td>
+</tr>
+<tr>
+<td>Specifier</td>
+<td>A type-dependent formatting option</td>
+</tr>
+<tr>
+<td>Fill</td>
+<td>A single character used for padding</td>
+</tr>
+<tr>
+<td>Alignment</td>
+<td>One of three characters '&lt;', '^' or '&gt;'; these are for left, middle and right alignment</td>
+</tr>
+<tr>
+<td>Width</td>
+<td>The total width of the field (characters)</td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>How many decimals a formatted number should have</td>
+</tr>
+</tbody>
+</table>
+<p>Position usage.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;position&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{0s}{0s}{1s}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="w"> </span><span class="s">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="w"> </span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;aab&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>Fill, alignment and width being used.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;fill, alignment, width&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{s: &lt;5}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="s">&quot;hi!&quot;</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;hi!  &quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{s:_^6}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="s">&quot;hi!&quot;</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;_hi!__&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{s:!&gt;4}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="s">&quot;hi!&quot;</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;!hi!&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>Using a specifier with precision.
+<div class="highlight"><pre><span></span><code><span class="k">test</span><span class="w"> </span><span class="s">&quot;precision&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kr">var</span><span class="w"> </span><span class="n">b</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">u8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">undefined</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="n">expectEqualSlices</span><span class="p">(</span>
+<span class="w">        </span><span class="kt">u8</span><span class="p">,</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="n">bufPrint</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{d:.2}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">.{</span><span class="mf">3.14159</span><span class="p">}),</span>
+<span class="w">        </span><span class="s">&quot;3.14&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h2 id="end-of-chapter-2">End of Chapter 2<a class="headerlink" href="#end-of-chapter-2" title="Permanent link">§</a></h2>
+<p>This chapter is incomplete. In the future it will contain things such as:</p>
+<ul>
+<li>Arbitrary Precision Maths</li>
+<li>Linked Lists</li>
+<li>Queues</li>
+<li>Mutexes</li>
+<li>Atomics</li>
+<li>Searching</li>
+<li>Logging</li>
+</ul>
+<p>Feedback and PRs are welcome.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Rodapé" >
+        
+          
+          <a href="../chapter-1/" class="md-footer__link md-footer__link--prev" aria-label="Anterior: Capítulo 1 - O básico" rel="prev">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Anterior
+              </span>
+              <div class="md-ellipsis">
+                Capítulo 1 - O básico
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../chapter-3/" class="md-footer__link md-footer__link--next" aria-label="Próximo: Capítulo 3 - O sistema de compilação" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Próximo
+              </span>
+              <div class="md-ellipsis">
+                Capítulo 3 - O sistema de compilação
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "toc.follow", "toc.integrate", "navigation.footer", "content.action.edit", "content.action.view"], "search": "../../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.78eede0e.min.js"></script>
+      
+    
+  </body>
+</html>

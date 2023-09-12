@@ -1,0 +1,3 @@
+signed_32bit_constant = "constante assinado de 32 bits"
+unsigned_32bit_variable = "constante não assinado de 32 bits"
+explicit_coercion = "@as faz a coerção explicita de tipos"
