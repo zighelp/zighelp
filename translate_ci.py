@@ -1,4 +1,3 @@
-from re import template
 import jinja2
 import os
 import sys
@@ -14,7 +13,6 @@ SNIPPET_DIR = "./docs/snippets/"
 IGNORE_FILES = ["CNAME", "assets", "stylesheets", "snippets"]
 
 # dict[language][chapter][snippet_name]
-# dict["no_translation"] includes all chapters with no translations provided
 SnippetsDict = dict[str, dict[str, dict[str, str]]]
 
 # dict[chapter][template_path]
@@ -61,6 +59,8 @@ def get_rendered_snippets_dict(template_dict: TemplateDict) -> SnippetsDict:
 
     # temporary dictionary holding all snippets that don't need to be rendered for each language
     snippets_dict["no_translation"] = dict()
+
+    # iterates through templates and renders them for each language
     for chapter, templates in template_dict.items():
 
         for template, translations in templates.items():
@@ -83,7 +83,6 @@ def get_rendered_snippets_dict(template_dict: TemplateDict) -> SnippetsDict:
                             snippets_dict[language][chapter] = dict()
                         snippets_dict[language][chapter][snippet_name] = templ.render(data)
 
-
     # snippets with no translations are copied to all chapter translations
     # this is necessary as Jinja2 cannot do partial templating, that means that 
     # unless all data is available in the first run the templates will be made as empty
@@ -91,13 +90,22 @@ def get_rendered_snippets_dict(template_dict: TemplateDict) -> SnippetsDict:
     for language in snippets_dict:
         if language == "no_translation": continue
 
-        for chapter_translated in snippets_dict[language]:
+        for chapter in snippets_dict[language]:
             for chapter_raw, snippets in snippets_dict["no_translation"].items():
-                if chapter_translated == chapter_raw:
+                if chapter == chapter_raw:
                     for snippet_name in snippets:
                         snippets_dict[language][chapter][snippet_name] = snippets_dict["no_translation"][chapter][snippet_name]
 
     del snippets_dict["no_translation"]
+
+    # copies rendered template from english to other languages if there's no rendered translation for them
+    for language in snippets_dict:
+        if language == 'en': continue
+
+        for chapter, snippets in snippets_dict['en'].items():
+            for snippet in snippets:
+                if snippet not in snippets_dict[language][chapter]:
+                    snippets_dict[language][chapter][snippet] = snippets_dict['en'][chapter][snippet]
 
     return snippets_dict
 

@@ -1,0 +1,4 @@
+for_loop = "Цикл for"
+character_equivalent_to_integer = "Указанные ниже литералы символов эквивалентны литералам своих значений в виде чисел"
+charater_comment = "// текущий элемент массива"
+index_comment = "// текущий индекс"

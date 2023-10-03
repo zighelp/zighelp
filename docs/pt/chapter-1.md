@@ -91,25 +91,7 @@ Com `break`.
 Loops For são usados para iterar arrays (e outros tipos discutidos mais tarde). Para loops siga a seguinte sintaxe. Como o while, os loops for usam `break` e `continue`. Aqui tivemos que atribuir valores ao `_`, porque o Zig não permite valores não usados.
 
 ```zig
-test "for" {
-    //character literals are equivalent to integer literals
-    const string = [_]u8{ 'a', 'b', 'c' };
-
-    for (string, 0..) |character, index| {
-        _ = character;
-        _ = index;
-    }
-
-    for (string) |character| {
-        _ = character;
-    }
-
-    for (string, 0..) |_, index| {
-        _ = index;
-    }
-
-    for (string) |_| {}
-}
+{{ for_loop }}
 ```
 
 ## Funções
